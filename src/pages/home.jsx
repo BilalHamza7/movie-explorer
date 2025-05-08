@@ -4,8 +4,6 @@ import MovieGrid from '../components/movieGrid';
 
 const Home = () => {
 
-  const navigate = useNavigate();
-
   return (
     <div>
       <MovieGrid />

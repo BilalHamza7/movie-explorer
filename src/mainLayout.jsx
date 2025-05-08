@@ -10,7 +10,7 @@ const MainLayout = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <nav className='flex justify-between items-center p-3 md:p-4 bg-[#EBEBEB]'>
+            <nav className='flex justify-between items-center p-3 md:p-4 bg-[#D6D6D6]'>
                 <p className='text-lg md:text-xl font-bold'>Movie Explorer</p>
                 <ul className='flex gap-3 md:gap-6'>
                     <Button variant={isActive === '/home' ? 'contained' : 'outlined'} color='primary' sx={{ textTransform: 'none', fontSize: { xs: '12px', sm: '12px' }, px: { xs: 2, sm: 3 } }}>
