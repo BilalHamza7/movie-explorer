@@ -1,8 +1,15 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
+import MovieGrid from '../components/movieGrid';
 
 const Home = () => {
+
+  const navigate = useNavigate();
+
   return (
-    <div>Movie Explorer</div>
+    <div>
+      <MovieGrid />
+    </div>
   )
 }
 
