@@ -1,17 +1,28 @@
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import React, { useState } from 'react';
 
-const Filter = ({ genres, selectedGenre, handleSelectedGenre, selectedReleaseYear, handleSelectedReleaseYear, handleSelectedReleaseDateGreaterThan, handleSelectedReleaseDateLessThan, selectedRating, handleSelectedRating }) => {
+import { setGenre, setRating, setReleaseDateRange, setReleaseYear } from '../store/filterSlice';
+import getAllMovies from '../api/getAllMovies';
+import { setMovies, setPageNumber } from '../store/movieSlice';
+
+const Filter = () => {
 
   // search bar
-  const [year, setYear] = useState();
+  const [year, setYear] = useState('');
+
+  const dispatch = useDispatch();
+  const { genreList, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, selectedGenre, selectedRating } = useSelector((state) => state.filters);
+  const { pageNumber } = useSelector((state) => state.movies);
 
   // handles year filter to make the date range
   const handleYearChange = (val) => {
     setYear(val);
 
-    if (val === '2025') return handleSelectedReleaseYear('2025');
-    if (val === '2024') return handleSelectedReleaseYear('2024');
+    if (val === '2025' || val === '2024') {
+      dispatch(setReleaseYear(val));
+      return;
+    }
 
     const ranges = {
       '2020-2025': ['2020-01-01', '2025-12-31'],
@@ -26,13 +37,25 @@ const Filter = ({ genres, selectedGenre, handleSelectedGenre, selectedReleaseYea
     };
 
     if (ranges[val]) {
-      handleSelectedReleaseDateGreaterThan(ranges[val][0]);
-      handleSelectedReleaseDateLessThan(ranges[val][1]);
+      dispatch(setReleaseYear(''));
+      dispatch(setReleaseDateRange({ gte: ranges[val][0], lte: ranges[val][1] }));
       return;
     }
-
-    return;
+    dispatch(setReleaseYear(''));
+    dispatch(setReleaseDateRange({ gte: '', lte: '' }));
   };
+
+  useEffect(() => {
+    const getMovies = async () => {
+      const response = await getAllMovies({ pageNumber, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, selectedRating, selectedGenre });
+      dispatch(setMovies(response.results));
+      dispatch(setPageNumber(response.page));
+      console.log(response.results)
+      console.log(selectedGenre);
+    };
+
+    getMovies();
+  }, [selectedGenre, selectedRating, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte]);
 
   return (
     <div className='w-full'>
@@ -52,12 +75,12 @@ const Filter = ({ genres, selectedGenre, handleSelectedGenre, selectedReleaseYea
             labelId="genre-label"
             value={selectedGenre}
             label="Genre"
-            onChange={(e) => handleSelectedGenre(e.target.value)}
+            onChange={(e) => dispatch(setGenre(e.target.value))}
           >
-            <MenuItem value=''><em>All</em></MenuItem>
+            <MenuItem value=''>All</MenuItem>
             {
-              genres?.map((item) =>
-                <MenuItem key={item.id} value={item.name}>
+              genreList?.map((item) =>
+                <MenuItem key={item.id} value={item.id}>
                   {item.name}
                 </MenuItem>
               )
@@ -74,7 +97,7 @@ const Filter = ({ genres, selectedGenre, handleSelectedGenre, selectedReleaseYea
             label="Year"
             onChange={(e) => handleYearChange(e.target.value)}
           >
-            <MenuItem value=""><em>All</em></MenuItem>
+            <MenuItem value="">All</MenuItem>
             <MenuItem value="2025">2025</MenuItem>
             <MenuItem value="2024">2024</MenuItem>
             <MenuItem value="2020-2025">2020-now</MenuItem>
@@ -96,9 +119,9 @@ const Filter = ({ genres, selectedGenre, handleSelectedGenre, selectedReleaseYea
             labelId="rating-label"
             value={selectedRating}
             label="Rating"
-            onChange={(e) => handleSelectedRating(e.target.value)}
+            onChange={(e) => dispatch(setRating(e.target.value))}
           >
-            <MenuItem value=""><em>All</em></MenuItem>
+            <MenuItem value="">All</MenuItem>
             <MenuItem value="9">9+</MenuItem>
             <MenuItem value="8">8+</MenuItem>
             <MenuItem value="7">7+</MenuItem>

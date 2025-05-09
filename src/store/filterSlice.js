@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    genreList: [],
     selectedGenre: '',
     selectedReleaseYear: '',
     selectedReleaseDateGte: '',
@@ -12,6 +13,9 @@ const filterSlice = createSlice({
     name: 'filters',
     initialState,
     reducers: {
+        setGenreList: (state, action) => {
+            state.genreList = action.payload;
+        },
         setGenre: (state, action) => {
             state.selectedGenre = action.payload;
         },
@@ -28,5 +32,5 @@ const filterSlice = createSlice({
     }
 });
 
-export const { setGenre, setReleaseYear, setReleaseDateRange, setRating } = filterSlice.actions;
+export const { setGenreList, setGenre, setReleaseYear, setReleaseDateRange, setRating } = filterSlice.actions;
 export default filterSlice.reducer;

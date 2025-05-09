@@ -1,15 +1,19 @@
-import { Card, CardActionArea, CardContent, CardMedia, Chip, Stack, Typography } from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia, Chip, Typography } from '@mui/material';
 import React from 'react'
+import { useSelector } from 'react-redux';
 
-const MovieCard = ({ movie, genreList }) => {
+const MovieCard = ({ movie }) => {
+
+    const { genreList } = useSelector((state) => state.filters);
 
     const genreNames = movie.genre_ids
         .map((id) => genreList.find((g) => g.id === id)?.name)
         .filter(Boolean); // removes undefined in case of no match
 
+
     return (
         <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <CardActionArea sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <CardActionArea color='#000' sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <CardMedia
                     component="img"
                     height="160"

@@ -1,21 +1,24 @@
 import axios from 'axios';
 
-const getAllMovies = async ({ pageNumber, releaseYear, releaseDateGreaterThan, releaseDateLessThan, rating, genres }) => {
+const getAllMovies = async ({ pageNumber, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, selectedRating, selectedGenre }) => {
+
+    console.log("genre ", selectedGenre);
 
     const params = new URLSearchParams({
         include_adult: 'false',
         include_video: 'false',
-        sort_by: 'primary_release_date.desc',
+        sort_by: 'popularity.desc',
     });
 
     if (pageNumber) params.append('page', pageNumber);
-    if (releaseYear) params.append('primary_release_year', releaseYear);
-    if (releaseDateGreaterThan) params.append('primary_release_date.gte', releaseDateGreaterThan);
-    if (releaseDateLessThan) params.append('primary_release_date.lte', releaseDateLessThan);
-    if (rating) params.append('vote_average.gte', rating);
-    if (genres) params.append('with_genres', genres);
+    if (selectedReleaseYear) params.append('primary_release_year', selectedReleaseYear);
+    if (selectedReleaseDateGte) params.append('primary_release_date.gte', selectedReleaseDateGte);
+    if (selectedReleaseDateLte) params.append('primary_release_date.lte', selectedReleaseDateLte);
+    if (selectedRating) params.append('vote_average.gte', selectedRating);
+    if (selectedGenre) params.append('with_genres', selectedGenre);
 
     const url = `https://api.themoviedb.org/3/discover/movie?${params.toString()}`;
+    console.log(params.toString());
 
     const options = {
         method: 'GET',
@@ -28,7 +31,6 @@ const getAllMovies = async ({ pageNumber, releaseYear, releaseDateGreaterThan, r
 
     try {
         const response = await axios.request(options);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error(error);
