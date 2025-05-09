@@ -1,13 +1,38 @@
 import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import React, { useState } from 'react';
 
-const Filter = ({ genres, selectedGenre, handleSelectedGenre }) => {
+const Filter = ({ genres, selectedGenre, handleSelectedGenre, selectedReleaseYear, handleSelectedReleaseYear, handleSelectedReleaseDateGreaterThan, handleSelectedReleaseDateLessThan, selectedRating, handleSelectedRating }) => {
 
   // search bar
-  // search by genre, year and rating (vote_average)
-  // const [genre, setGenre] = useState('');
-  const [year, setYear] = useState('');
-  const [rating, setRating] = useState('');
+  const [year, setYear] = useState();
+
+  // handles year filter to make the date range
+  const handleYearChange = (val) => {
+    setYear(val);
+
+    if (val === '2025') return handleSelectedReleaseYear('2025');
+    if (val === '2024') return handleSelectedReleaseYear('2024');
+
+    const ranges = {
+      '2020-2025': ['2020-01-01', '2025-12-31'],
+      '2010-2025': ['2010-01-01', '2025-12-31'],
+      '2010-2019': ['2010-01-01', '2019-12-31'],
+      '2000-2009': ['2000-01-01', '2009-12-31'],
+      '1990-1999': ['1990-01-01', '1999-12-31'],
+      '1980-1989': ['1980-01-01', '1989-12-31'],
+      '1970-1979': ['1970-01-01', '1979-12-31'],
+      '1950-1969': ['1950-01-01', '1969-12-31'],
+      '1900-1949': ['1900-01-01', '1949-12-31'],
+    };
+
+    if (ranges[val]) {
+      handleSelectedReleaseDateGreaterThan(ranges[val][0]);
+      handleSelectedReleaseDateLessThan(ranges[val][1]);
+      return;
+    }
+
+    return;
+  };
 
   return (
     <div className='w-full'>
@@ -47,9 +72,9 @@ const Filter = ({ genres, selectedGenre, handleSelectedGenre }) => {
             labelId="year-label"
             value={year}
             label="Year"
-            onChange={(e) => setYear(e.target.value)}
+            onChange={(e) => handleYearChange(e.target.value)}
           >
-            <MenuItem value="0"><em>All</em></MenuItem>
+            <MenuItem value=""><em>All</em></MenuItem>
             <MenuItem value="2025">2025</MenuItem>
             <MenuItem value="2024">2024</MenuItem>
             <MenuItem value="2020-2025">2020-now</MenuItem>
@@ -69,20 +94,20 @@ const Filter = ({ genres, selectedGenre, handleSelectedGenre }) => {
           <InputLabel id="rating-label">Rating</InputLabel>
           <Select
             labelId="rating-label"
-            value={rating}
+            value={selectedRating}
             label="Rating"
-            onChange={(e) => setRating(e.target.value)}
+            onChange={(e) => handleSelectedRating(e.target.value)}
           >
             <MenuItem value=""><em>All</em></MenuItem>
-            <MenuItem value="9+">9+</MenuItem>
-            <MenuItem value="8+">8+</MenuItem>
-            <MenuItem value="7+">7+</MenuItem>
-            <MenuItem value="6+">6+</MenuItem>
-            <MenuItem value="5+">5+</MenuItem>
-            <MenuItem value="4+">4+</MenuItem>
-            <MenuItem value="3+">3+</MenuItem>
-            <MenuItem value="2+">2+</MenuItem>
-            <MenuItem value="1+">1+</MenuItem>
+            <MenuItem value="9">9+</MenuItem>
+            <MenuItem value="8">8+</MenuItem>
+            <MenuItem value="7">7+</MenuItem>
+            <MenuItem value="6">6+</MenuItem>
+            <MenuItem value="5">5+</MenuItem>
+            <MenuItem value="4">4+</MenuItem>
+            <MenuItem value="3">3+</MenuItem>
+            <MenuItem value="2">2+</MenuItem>
+            <MenuItem value="1">1+</MenuItem>
           </Select>
         </FormControl>
       </div>
