@@ -5,6 +5,7 @@ import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } fr
 import { setGenre, setRating, setReleaseDateRange, setReleaseYear } from '../store/filterSlice';
 import getAllMovies from '../api/getAllMovies';
 import { setMovies, setPageNumber } from '../store/movieSlice';
+import getMovieBySearch from '../api/getMovieBySearch';
 
 const Filter = () => {
 
@@ -13,7 +14,7 @@ const Filter = () => {
 
   const dispatch = useDispatch();
   const { genreList, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, selectedGenre, selectedRating } = useSelector((state) => state.filters);
-  const { pageNumber } = useSelector((state) => state.movies);
+  const { movies, pageNumber } = useSelector((state) => state.movies);
 
   // handles year filter to make the date range
   const handleYearChange = (val) => {
@@ -45,6 +46,14 @@ const Filter = () => {
     dispatch(setReleaseDateRange({ gte: '', lte: '' }));
   };
 
+  const handleSearch = async (query) => {
+    const response = await getMovieBySearch(query);
+    console.log(response);
+
+    // dispatch(setMovies(response.results));
+    // dispatch(setPageNumber(response.page));
+  }
+
   useEffect(() => {
     const getMovies = async () => {
       const response = await getAllMovies({ pageNumber, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, selectedRating, selectedGenre });
@@ -63,7 +72,8 @@ const Filter = () => {
         id="search-movies"
         freeSolo
         // options={top100Films.map((option) => option.title)}
-        options={['1', '2', '3', '4', '54', 'bilal']}
+        onChange={(e) => handleSearch(e.target.value)}
+        options={movies.map((movie) => movie.original_title)}
         renderInput={(params) => <TextField {...params} label="Search Movies" />}
       />
       <div className="flex gap-5 mt-6">
