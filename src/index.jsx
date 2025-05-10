@@ -8,6 +8,7 @@ import Login from './pages/login.jsx';
 import Trending from './pages/trending.jsx';
 import { Provider } from 'react-redux';
 import store from './store/store.js';
+import MovieDetails from './components/movieDetails.jsx';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/" element={<MainLayout />}>
           <Route path='/home' element={<Home />} />
           <Route path='/trending' element={<Trending />} />
+          <Route path="/detailsPage" element={<MovieDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>

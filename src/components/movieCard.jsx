@@ -1,8 +1,11 @@
 import { Card, CardActionArea, CardContent, CardMedia, Chip, Typography } from '@mui/material';
 import React from 'react'
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const MovieCard = ({ movie }) => {
+
+    const navigate = useNavigate();
 
     const { genreList } = useSelector((state) => state.filters);
 
@@ -10,10 +13,9 @@ const MovieCard = ({ movie }) => {
         .map((id) => genreList.find((g) => g.id === id)?.name)
         .filter(Boolean); // removes undefined in case of no match
 
-
     return (
         <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <CardActionArea color='#000' sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <CardActionArea color='#000' sx={{ display: 'flex', flexDirection: 'column', height: '100%' }} onClick={() => navigate(`/detailsPage?id=${movie.id}`)}>
                 <CardMedia
                     component="img"
                     height="160"

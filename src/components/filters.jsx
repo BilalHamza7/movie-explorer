@@ -61,12 +61,7 @@ const Filter = () => {
   const getMovies = async () => {
     const response = await getAllMovies({ pageNumber, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, selectedRating, selectedGenre });
     dispatch(setMovies(response.results));
-    dispatch(setPageNumber(response.page));
   };
-
-  useEffect(() => {
-    getMovies();
-  }, [selectedGenre, selectedRating, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte]);
 
   return (
     <div className='w-full mt-5'>

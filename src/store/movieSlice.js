@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     movies: [],
     trendingMovies: [],
-    pageNumber: 0,
+    pageNumber: 1,
     searchResult: []
 };
 
@@ -17,8 +17,14 @@ const movieSlice = createSlice({
         setTrendingMovies: (state, action) => {
             state.trendingMovies = action.payload;
         },
-        setPageNumber: (state, action) => {
-            state.pageNumber = action.payload;
+        setPageIncrement: (state) => {
+            state.pageNumber += 1;
+        },
+        setPageDecrement: (state) => {
+            state.pageNumber = Math.max(0, state.pageNumber - 1); // prevent negative page numbers
+        },
+        setPageReset: (state) => {
+            state.pageNumber = 1; // reset page number to 1
         },
         setSearchResult: (state, action) => {
             state.searchResult = action.payload;
@@ -26,5 +32,5 @@ const movieSlice = createSlice({
     }
 });
 
-export const { setMovies, setTrendingMovies, setPageNumber, setSearchResult } = movieSlice.actions;
+export const { setMovies, setTrendingMovies, setPageNumber, setSearchResult, setPageIncrement, setPageDecrement, setPageReset } = movieSlice.actions;
 export default movieSlice.reducer;

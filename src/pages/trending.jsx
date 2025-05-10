@@ -20,7 +20,7 @@ const Trending = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen p-6 bg-[#CCC9DC]">
-      <p className='text-3xl'>Movies Trending This Week!</p>
+      <p className='text-2xl md:text-3xl'>Movies Trending This Week!</p>
       <MovieGrid movies={trendingMovies} />
     </div>
   )
