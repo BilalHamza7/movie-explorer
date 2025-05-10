@@ -34,6 +34,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen p-6 bg-[#CCC9DC]">
+      <p className='text-3xl'>Explore Latest Movies!</p>
       <Filter />
       <MovieGrid movies={movies} />
     </div>

@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     movies: [],
     trendingMovies: [],
-    pageNumber: 0
+    pageNumber: 0,
+    searchResult: []
 };
 
 const movieSlice = createSlice({
@@ -18,9 +19,12 @@ const movieSlice = createSlice({
         },
         setPageNumber: (state, action) => {
             state.pageNumber = action.payload;
+        },
+        setSearchResult: (state, action) => {
+            state.searchResult = action.payload;
         }
     }
 });
 
-export const { setMovies, setTrendingMovies, setPageNumber } = movieSlice.actions;
+export const { setMovies, setTrendingMovies, setPageNumber, setSearchResult } = movieSlice.actions;
 export default movieSlice.reducer;

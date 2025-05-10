@@ -7,6 +7,7 @@ const getAllMovies = async ({ pageNumber, selectedReleaseYear, selectedReleaseDa
     const params = new URLSearchParams({
         include_adult: 'false',
         include_video: 'false',
+        with_original_language: 'en',
         sort_by: 'popularity.desc',
     });
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 const getGenres = async () => {
     const options = {
         method: 'GET',
-        url: 'https://api.themoviedb.org/3/genre/movie/list',
+        url: 'https://api.themoviedb.org/3/genre/movie/list?language=en',
         headers: {
             accept: 'application/json',
             Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NzMzNTZhNTZjZmQ5Nzk0MGY5Mjg5YmM5MzdkNDAwNyIsIm5iZiI6MTc0NjY4OTczOS43NDIsInN1YiI6IjY4MWM1ZWNiNTBjNDZkNmY0ZDNlYzcxZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ejvhFexR7SgsUG5_fhkop9eZ_ZOss9pz-pkN6yqrVAY'

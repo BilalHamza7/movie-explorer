@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Autocomplete, CardMedia, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 import { setGenre, setRating, setReleaseDateRange, setReleaseYear } from '../store/filterSlice';
 import getAllMovies from '../api/getAllMovies';
-import { setMovies, setPageNumber } from '../store/movieSlice';
+import { setMovies, setPageNumber, setSearchResult } from '../store/movieSlice';
 import getMovieBySearch from '../api/getMovieBySearch';
 
 const Filter = () => {
@@ -14,7 +14,7 @@ const Filter = () => {
 
   const dispatch = useDispatch();
   const { genreList, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, selectedGenre, selectedRating } = useSelector((state) => state.filters);
-  const { movies, pageNumber } = useSelector((state) => state.movies);
+  const { movies, pageNumber, searchResult } = useSelector((state) => state.movies);
 
   // handles year filter to make the date range
   const handleYearChange = (val) => {
@@ -46,35 +46,53 @@ const Filter = () => {
     dispatch(setReleaseDateRange({ gte: '', lte: '' }));
   };
 
-  const handleSearch = async (query) => {
-    const response = await getMovieBySearch(query);
-    console.log(response);
-
-    // dispatch(setMovies(response.results));
-    // dispatch(setPageNumber(response.page));
+  const handleSearch = async (value) => {
+    if (value.trim() !== '') {
+      const response = await getMovieBySearch(value);
+      const filtered = response.results.filter(movie => movie.original_language === 'en');
+      dispatch(setSearchResult(filtered));
+      dispatch(setMovies(filtered));
+    } else {
+      dispatch(setSearchResult([]));
+      getMovies();
+    };
   }
 
-  useEffect(() => {
-    const getMovies = async () => {
-      const response = await getAllMovies({ pageNumber, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, selectedRating, selectedGenre });
-      dispatch(setMovies(response.results));
-      dispatch(setPageNumber(response.page));
-      console.log(response.results)
-      console.log(selectedGenre);
-    };
+  const getMovies = async () => {
+    const response = await getAllMovies({ pageNumber, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, selectedRating, selectedGenre });
+    dispatch(setMovies(response.results));
+    dispatch(setPageNumber(response.page));
+  };
 
+  useEffect(() => {
     getMovies();
   }, [selectedGenre, selectedRating, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte]);
 
   return (
-    <div className='w-full'>
+    <div className='w-full mt-5'>
       <Autocomplete
         id="search-movies"
         freeSolo
-        // options={top100Films.map((option) => option.title)}
-        onChange={(e) => handleSearch(e.target.value)}
-        options={movies.map((movie) => movie.original_title)}
-        renderInput={(params) => <TextField {...params} label="Search Movies" />}
+        options={searchResult}
+        getOptionLabel={(option) => option.original_title || ''}
+        renderOption={(props, option) => (
+          <li {...props} key={option.id} className='flex gap-2 p-1 items-center w-full bg-[#D6D6D6]'>
+            <img
+              src={`https://image.tmdb.org/t/p/w92${option.backdrop_path}`}
+              alt={option.original_title}
+              className='w-36 md:w-52 h-20 md:h-28 object-cover'
+            />
+            <span>{option.original_title}</span>
+          </li>
+        )}
+        onInputChange={(event, value, reason) => {
+          handleSearch(value);
+        }}
+        onChange={(event, value) => {
+          if (value && value.original_title) {
+            handleSearch(value.original_title);
+          }
+        }} renderInput={(params) => <TextField {...params} label="Search Movies" />}
       />
       <div className="flex gap-5 mt-6">
 
