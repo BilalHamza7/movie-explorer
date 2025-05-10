@@ -77,7 +77,7 @@ const MovieDetails = () => {
         <div className="flex flex-col gap-3 w-full">
           <p className='text-xl font-semibold'>Trailer:</p>
           <iframe
-            className="w-full h-64 md:w-1/2 md:h-full"
+            className="w-full h-64 md:w-1/2 md:h-96"
             src={`https://www.youtube.com/embed/${key}`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
