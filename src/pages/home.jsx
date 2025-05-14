@@ -30,7 +30,7 @@ const Home = () => {
 
     getMovies();
     getAllGenres();
-  }, [pageNumber]);
+  }, [selectedGenre, selectedRating, selectedReleaseYear, selectedReleaseDateGte, selectedReleaseDateLte, pageNumber]);
 
   useEffect(() => {
     dispatch(setPageReset());
